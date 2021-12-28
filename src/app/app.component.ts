@@ -47,51 +47,49 @@ export class AppComponent implements OnInit {
   data:any;
 
   // Function to generate Pdf multi pages
-  // downloadPDF() {
+  downloadPDF() {
 
-  //     this.pdf = new jsPDF('p', 'mm', 'a4') // A4 size page of PDF
-  //     this.length = this.items.length;
-  //     this.counter = 0;
+      this.pdf = new jsPDF('p', 'mm', 'a4') // A4 size page of PDF
+      this.length = this.items.length;
+      this.counter = 0;
 
-  //     this.generatePDF()
-  // }
+      this.generatePDF()
+  }
 
-  // generatePDF() {
+  generatePDF() {
 
-  //     this.data = document.getElementById('pdf' + this.counter)
+      this.data = document.getElementById('pdf' + this.counter)
 
-  //     console.log(this.data);
+      console.log(this.data);
 
-  //     html2canvas((this.data), {
-  //       scale: 3 // make better quality ouput
-  //     }).then((canvas) => {
+      html2canvas((this.data), {
+        scale: 3 // make better quality ouput
+      }).then((canvas) => {
 
-  //       this.counter++
+        this.counter++
 
-  //       // Few necessary setting options
-  //       var imgWidth = 208;
-  //       var imgHeight = (canvas.height * imgWidth) / canvas.width;
+        // Few necessary setting options
+        var imgWidth = 208;
+        var imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  //       const contentDataURL = canvas.toDataURL('image/png')
-  //       var position = 0
-  //       this.pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
+        const contentDataURL = canvas.toDataURL('image/png')
+        var position = 0
+        this.pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
 
-  //       // Control if new page needed, else generate the pdf
-  //       if (this.counter < this.length) {
-  //           this.pdf.addPage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
-  //           this.getLetter();
-  //       } else {
-  //           this.pdf.save('users.pdf') // Generated PDF
-  //           return true
-  //       }
-  //     })
-  // }
+        // Control if new page needed, else generate the pdf
+        if (this.counter < this.length) {
+            this.pdf.addPage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
+            this.getLetter();
+        } else {
+            this.pdf.save('users.pdf') // Generated PDF
+            return true
+        }
+      })
+  }
 
-  // getLetter() {
+  getLetter() {
 
-  // }
-
-
+  }
 
   // Id:number = 1;
   // @ViewChild("canvas_div_pdf") dataPDF : ElementRef;
@@ -162,7 +160,6 @@ export class AppComponent implements OnInit {
   chartOption: EChartsOption;
 
   setOptionChart() {
-
     this.chartOption = {
       xAxis: {
         type: "category",
@@ -178,7 +175,6 @@ export class AppComponent implements OnInit {
         }
       ]
     }
-
   }
 
 }
