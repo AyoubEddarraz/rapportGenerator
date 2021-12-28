@@ -1,13 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 // import { Editor } from 'ngx-editor';
-
-import * as html2pdf from 'html2pdf.js';
-
 import { Chart, registerables } from 'chart.js';
 
+import * as html2pdf from 'html2pdf.js';
 import html2canvas from 'html2canvas';
+// import jsPDF from 'jspdf';
+
+// The new Import PdfMaker
 import jsPDF from 'jspdf';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import htmlToPdfmake from 'html-to-pdfmake';
+import { EChartsOption } from 'echarts';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +30,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.htmlContent = localStorage.getItem("editorData");
+    this.setOptionChart();
   }
 
   // change the status of the editor
@@ -40,53 +47,51 @@ export class AppComponent implements OnInit {
   data:any;
 
   // Function to generate Pdf multi pages
-  downloadPDF() {
+  // downloadPDF() {
 
-      this.pdf = new jsPDF('p', 'mm', 'a4') // A4 size page of PDF
-      this.length = this.items.length;
-      this.counter = 0;
+  //     this.pdf = new jsPDF('p', 'mm', 'a4') // A4 size page of PDF
+  //     this.length = this.items.length;
+  //     this.counter = 0;
 
-      this.generatePDF()
-  }
+  //     this.generatePDF()
+  // }
 
-  generatePDF() {
+  // generatePDF() {
 
-      this.data = document.getElementById('pdf' + this.counter)
+  //     this.data = document.getElementById('pdf' + this.counter)
 
-      console.log(this.data);
+  //     console.log(this.data);
 
-      html2canvas((this.data), {
-        scale: 3 // make better quality ouput
-      }).then((canvas) => {
+  //     html2canvas((this.data), {
+  //       scale: 3 // make better quality ouput
+  //     }).then((canvas) => {
 
-        this.counter++
+  //       this.counter++
 
-        // Few necessary setting options
-        var imgWidth = 208;
-        var imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //       // Few necessary setting options
+  //       var imgWidth = 208;
+  //       var imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        const contentDataURL = canvas.toDataURL('image/png')
-        var position = 0
-        this.pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+  //       const contentDataURL = canvas.toDataURL('image/png')
+  //       var position = 0
+  //       this.pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
 
-        // Control if new page needed, else generate the pdf
-        if (this.counter < this.length) {
-            this.pdf.addPage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-            this.getLetter();
-        } else {
-            this.pdf.save('users.pdf') // Generated PDF
-            return true
-        }
-      })
-  }
+  //       // Control if new page needed, else generate the pdf
+  //       if (this.counter < this.length) {
+  //           this.pdf.addPage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
+  //           this.getLetter();
+  //       } else {
+  //           this.pdf.save('users.pdf') // Generated PDF
+  //           return true
+  //       }
+  //     })
+  // }
 
-  getLetter() {
+  // getLetter() {
 
-  }
+  // }
 
-  dataEditorTextChanged(data){
-    localStorage.setItem("editorData" , this.htmlContent);
-  }
+
 
   // Id:number = 1;
   // @ViewChild("canvas_div_pdf") dataPDF : ElementRef;
@@ -125,5 +130,55 @@ export class AppComponent implements OnInit {
 
 
   // }
+
+
+
+  // Paramas
+
+  dataEditorTextChanged(data){
+    localStorage.setItem("editorData" , this.htmlContent);
+  }
+
+  // Params
+  @ViewChild('pdfMaker') pdfMaker: ElementRef;
+
+  public downloadAsPDF() {
+
+    const doc = new jsPDF();
+
+    const pdfTable = this.pdfMaker.nativeElement;
+
+    var html = htmlToPdfmake(pdfTable.innerHTML);
+
+    const documentDefinition = { content: html };
+
+    pdfMake.createPdf(documentDefinition).download();
+    pdfMake.createPdf(documentDefinition).open();
+
+  }
+
+
+  // handle chartjs
+  chartOption: EChartsOption;
+
+  setOptionChart() {
+
+    this.chartOption = {
+      xAxis: {
+        type: "category",
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      },
+      yAxis: {
+        type: "value"
+      },
+      series: [
+        {
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: "line"
+        }
+      ]
+    }
+
+  }
 
 }

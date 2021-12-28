@@ -8,19 +8,21 @@
   <angular-editor placeholder="'Enter text here...'" [(ngModel)]="htmlContent" (ngModelChange)="dataEditorTextChanged($event)"></angular-editor>
 </div>
 
-<div [id]="'pdf'+0" class="pdf shadow-sm p-4" cdkDrag>
+<div #pdfMaker [id]="'pdf'+0" class="pdf shadow-sm p-4" cdkDrag>
 
 
   <h2 class="text-center my-3">Peaqock Rapport</h2>
   <hr>
 
-  <div [innerHTML]="htmlContent"></div>
+  <div echarts [options]="chartOption"></div>
+
+  <div class="chartLine" [innerHTML]="htmlContent"></div>
 
 
 </div>
 
 <div class="operation shadow-sm">
-  <div class="icone" (click)="downloadPDF()">
+  <div class="icone" (click)="downloadAsPDF()">
     <mat-icon class="icon_icone">picture_as_pdf</mat-icon>
   </div>
 </div>
